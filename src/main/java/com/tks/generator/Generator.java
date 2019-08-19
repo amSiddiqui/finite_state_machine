@@ -38,12 +38,17 @@ public class Generator {
         int transitionFuntion[][];
         // Store Name of DFA
         String name;
+        // Store description of DFA
+        String description;
         
         // Input Name of DFA
         System.out.print("Enter a name of DFA: ");
         // TODO: Check if name already exists
         name = scan.nextLine();
         
+        System.out.println("Enter description: ");
+        description = scan.nextLine();
+
         // Replace white spaces with _
         name = name.replace(' ', '_');
 
@@ -112,7 +117,7 @@ public class Generator {
         }
 
         // Create a new DFA with all the inputs
-        DFA dfa = new DFA(name, terminals, numberOfStates, finalStates, transitionFuntion);
+        DFA dfa = new DFA(name, terminals, numberOfStates, finalStates, transitionFuntion, description);
 
         // Store this DFA as a json File
         // Create a new Folder called DFA
@@ -138,6 +143,9 @@ public class Generator {
             System.out.println(ex);
             System.exit(1);
         }
+
+        System.out.println("----------------------------------------------");
+        System.out.println();
     }
 
     private char[] processRawTerminals(String rawTerminals) throws IllegalTerminalValueException {

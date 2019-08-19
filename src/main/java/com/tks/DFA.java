@@ -1,5 +1,7 @@
 package com.tks;
 
+import com.tks.generator.IllegalTerminalValueException;
+
 public class DFA {
     private String name;
     private char terminals[];
@@ -8,6 +10,7 @@ public class DFA {
     private int finalStates[];
     private int transitionFunction[][];
     private int currentState;
+    private String description;
 
     public DFA() {
         this.terminals = new char[0];
@@ -16,6 +19,7 @@ public class DFA {
         this.finalStates = new int[0];
         this.currentState = 0;
         this.transitionFunction = new int[0][0]; 
+        this.description = "";
     }
 
     public DFA(String name, char terminals[], int numberOfStates, int finalStates[], int transitionFunction[][]) {
@@ -28,11 +32,23 @@ public class DFA {
         this.currentState = this.initialState;
     }
 
+    public DFA(String name, char terminals[], int numberOfStates, int finalStates[], int transitionFunction[][], String desc) {
+        this(name, terminals, numberOfStates, finalStates, transitionFunction);
+        this.description = desc;
+    }
+
     public DFA(String name, char terminals[], int numberOfStates, int finalStates[], int transitionFunction[][], int initialState) {
         this(name, terminals, numberOfStates, finalStates, transitionFunction);
         this.initialState = initialState;
         this.currentState = this.initialState;
     }
+
+    public DFA(String name, char terminals[], int numberOfStates, int finalStates[], int transitionFunction[][], int initialState, String description) {
+        this(name, terminals, numberOfStates, finalStates, transitionFunction, initialState);
+        this.description = description;
+    }
+
+    
 
     public int nextState(char terminal) {
         int tIndex = linearSearch(this.terminals, terminal);
@@ -48,6 +64,58 @@ public class DFA {
             }
         }
         return false;
+    }
+
+    public boolean validInput(String input, boolean debug) throws IllegalTerminalValueException {
+        char inputTerminals[] = parseInput(input);
+        return validInput(inputTerminals, debug);
+    }
+
+    public boolean validInput(char input[], boolean debug) throws IllegalTerminalValueException {
+        // Check if each input terminal is a valid terminal
+        boolean isValid = false;
+        for (char val : input) {
+            if (linearSearch(this.terminals, val) == -1) {
+                throw new IllegalTerminalValueException(val+"");
+            }
+        }
+        int curState = this.initialState;
+        if (debug) {
+            System.out.print("Q"+curState+" ==> ");
+        }
+        for (char t : input) {
+            curState = this.nextState(t);
+            if (debug && t != input[input.length-1]) {
+                if ( isFinalSate(curState) ) {
+                    System.out.print("\033[1;32mQ"+curState+"\033[0m ==> ");
+                }else{
+                    System.out.print("Q"+curState+" ==> ");
+                }
+            }
+        }
+        if (debug) {
+            if ( isFinalSate(curState) ) {
+                System.out.println("\033[1;32mQ"+curState+"\033[0m");
+            }else{
+                System.out.println("Q"+curState);
+            }
+        }
+        if ( isFinalSate(curState) ) {
+            isValid = true;
+        }
+        this.reset();
+        return isValid;
+    }
+
+
+    private char[] parseInput(String input) throws IllegalTerminalValueException {
+        char inputTerminals[] = input.toCharArray();
+        for (char val : inputTerminals) {
+            if ( this.linearSearch(this.terminals, val) == -1 ) {
+                throw new IllegalTerminalValueException(val+"");
+            }
+        }
+        return inputTerminals;
     }
 
     public void reset() {
@@ -109,5 +177,13 @@ public class DFA {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }
