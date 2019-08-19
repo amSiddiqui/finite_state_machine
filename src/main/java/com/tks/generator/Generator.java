@@ -43,6 +43,7 @@ public class Generator {
         System.out.print("Enter a name of DFA: ");
         // TODO: Check if name already exists
         name = scan.nextLine();
+        
         // Replace white spaces with _
         name = name.replace(' ', '_');
 
@@ -63,7 +64,7 @@ public class Generator {
 
         // Input number of states
         System.out.print("Enter number of states: ");
-        numberOfStates = scan.nextInt(); 
+        numberOfStates = Integer.parseInt(scan.nextLine()); 
 
         // TODO: Add user choice to change initial state
 
@@ -71,7 +72,7 @@ public class Generator {
         System.out.println("Enter Final states (e.g. q1,q2,q3): ");
         String rawFinalStates;
         while(true) {
-            rawFinalStates = scan.next();
+            rawFinalStates = scan.nextLine();
             try {
                 finalStates = processRawFinalStates(rawFinalStates, numberOfStates-1);
                 break;
@@ -115,19 +116,19 @@ public class Generator {
 
         // Store this DFA as a json File
         // Create a new Folder called DFA
-        File dfaFolder = new File("../");
+        File dfaFolder = new File("./DFA");
         dfaFolder.mkdir();
         GsonBuilder builder = new GsonBuilder();
         builder.setPrettyPrinting();
         Gson gson = builder.create();
         String jsonDfa = gson.toJson(dfa);
-        File newDFAFile = new File("../DFA", dfa.getName()+".json");
+        File newDFAFile = new File("./DFA", dfa.getName()+".json");
         try {
             FileOutputStream outputStream = new FileOutputStream(newDFAFile);
             outputStream.write(jsonDfa.getBytes());
             try {
                 outputStream.close();
-                System.out.println("DFA machine successfully saved");
+                System.out.println("DFA machine successfully saved in file "+newDFAFile.getAbsolutePath());
             }catch(Exception ex) {
                 System.out.println("Exception while closing outputStrem");
                 System.out.println(ex);

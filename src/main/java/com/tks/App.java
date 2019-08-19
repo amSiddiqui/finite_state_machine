@@ -23,7 +23,7 @@ public class App
         int choice = -1;
         // Keep prompting till user enters a correct value
         while (true) {
-            choice = scan.nextInt();
+            choice = Integer.parseInt(scan.nextLine());
             if (choice < 1 || choice > 3 ) {
                 System.out.println("Wrong Choice");
                 System.out.print("Enter Again: ");
