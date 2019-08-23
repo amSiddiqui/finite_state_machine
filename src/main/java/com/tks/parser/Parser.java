@@ -39,28 +39,34 @@ public class Parser {
                 System.out.println((i+1)+": "+files[i]);
             }
             System.out.print("Enter choice: ");
-            int choice = Integer.parseInt(scan.nextLine());
+            int choice = Integer.parseInt(scan.nextLine().trim());
             while (choice > files.length || choice < 1) {
                 System.out.print("Wrong Choice Enter Again: ");
-                choice = Integer.parseInt(scan.nextLine());
+                choice = Integer.parseInt(scan.nextLine().trim());
             } 
             String filename = files[choice-1];
             String jsonText = parseJsonFile(filename);
             Gson gson = new Gson();
             DFA dfa = gson.fromJson(jsonText, DFA.class);
             System.out.println("-----------------------"+dfa.getName()+"--------------------");
-            System.out.println("Enter input Terminal. Valid Terminal values: "+Arrays.toString(dfa.getTerminals()));
             if (dfa.getDescription().length() != 0) {
                 System.out.println("Description: "+dfa.getDescription());
             }
+            System.out.println("Enter input Terminal. Valid Terminal values: "+Arrays.toString(dfa.getTerminals()));
             String inputTerminal;
             while(true) {
-                inputTerminal = scan.nextLine();
+                inputTerminal = scan.nextLine().trim();
                 try {
                     if (dfa.validInput(inputTerminal, DEBUG)){
                         System.out.println("INPUT ACCEPTED");
                     } else {
                         System.out.println("INPUT REJECTED");
+                    }
+                    System.out.print("New Input? (y/n): ");
+                    String contChoice = scan.nextLine().trim();
+                    if (contChoice.equalsIgnoreCase("y") || contChoice.equalsIgnoreCase("yes")) {
+                        System.out.println("Enter Input: ");
+                        continue;
                     }
                     break;
                 }catch(IllegalTerminalValueException ex) {

@@ -44,10 +44,10 @@ public class Generator {
         // Input Name of DFA
         System.out.print("Enter a name of DFA: ");
         // TODO: Check if name already exists
-        name = scan.nextLine();
+        name = scan.nextLine().trim();
         
         System.out.println("Enter description: ");
-        description = scan.nextLine();
+        description = scan.nextLine().trim();
 
         // Replace white spaces with _
         name = name.replace(' ', '_');
@@ -56,7 +56,7 @@ public class Generator {
         System.out.println("Enter Terminals (Eg: 1,0 or a,b,c)");
         String rawTerminals;
         while(true) {
-            rawTerminals = scan.nextLine();
+            rawTerminals = scan.nextLine().trim();
             try {
                 terminals = processRawTerminals(rawTerminals);
                 break;
@@ -69,7 +69,7 @@ public class Generator {
 
         // Input number of states
         System.out.print("Enter number of states: ");
-        numberOfStates = Integer.parseInt(scan.nextLine()); 
+        numberOfStates = Integer.parseInt(scan.nextLine().trim()); 
 
         // TODO: Add user choice to change initial state
 
@@ -77,7 +77,7 @@ public class Generator {
         System.out.println("Enter Final states (e.g. q1,q2,q3): ");
         String rawFinalStates;
         while(true) {
-            rawFinalStates = scan.nextLine();
+            rawFinalStates = scan.nextLine().trim();
             try {
                 finalStates = processRawFinalStates(rawFinalStates, numberOfStates-1);
                 break;
@@ -99,7 +99,7 @@ public class Generator {
             for (int j = 0; j < transitionFuntion[i].length; j++) {
                 while (true) {
                     System.out.print("Q"+i+" --"+terminals[j]+"--> ");
-                    String rawState = scan.nextLine();
+                    String rawState = scan.nextLine().trim();
                     try {
                         transitionFuntion[i][j] = processRawState(rawState, numberOfStates-1);
                         break;

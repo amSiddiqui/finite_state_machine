@@ -83,9 +83,11 @@ public class DFA {
         if (debug) {
             System.out.print("Q"+curState+" ==> ");
         }
+        int count = 0;
         for (char t : input) {
+            count++;
             curState = this.nextState(t);
-            if (debug && t != input[input.length-1]) {
+            if (debug && count  != input.length) {
                 if ( isFinalSate(curState) ) {
                     System.out.print("\033[1;32mQ"+curState+"\033[0m ==> ");
                 }else{
